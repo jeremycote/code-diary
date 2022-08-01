@@ -9,6 +9,9 @@ export default class GithubClient implements ApiClient{
     private client: AxiosInstance;
 
     protected createClient(apiConfiguration: GithubApiConfiguration): AxiosInstance {
+        
+        console.log(`Token ${apiConfiguration.token}`)
+        
         return Axios.create({
             baseURL: apiConfiguration.baseUrl,
             responseType: "json" as const,
