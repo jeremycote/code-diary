@@ -1,10 +1,12 @@
-import React from "react";
-import AppBar from "./features/app-bar/AppBar";
+import ConfigContextProvider from "./context/ConfigContextProvider";
+import MainView from "./MainView";
 
 function App() {
   return (
-    <div className="bg-blue-200 dark:bg-grey-800 w-full h-full absolute">
-      <AppBar />
+    <div>
+      <ConfigContextProvider theme="dark" appName="Code Diary">
+        <MainView />
+      </ConfigContextProvider>
     </div>
   );
 }
