@@ -5,7 +5,11 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import React from "react";
 
-class GistCard extends React.Component {
+type GistCardProp = {
+  title: string
+}
+
+class GistCard extends React.Component<GistCardProp, {}> {
   render() {
     return (
       <Card sx={{ maxWidth: 345 }}>
@@ -18,7 +22,7 @@ class GistCard extends React.Component {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              Lizard
+              {this.props.title}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Lizards are a widespread group of squamate reptiles, with over
