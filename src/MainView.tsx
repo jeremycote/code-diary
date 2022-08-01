@@ -1,6 +1,7 @@
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
-import ResponsiveAppBar from "./components/ResponsiveAppBar/ResponsiveAppBar";
+import Dashboard from "./components/dashboard/Dashboard";
+import ResponsiveAppBar from "./components/responsiveAppBar/ResponsiveAppBar";
 import {
   ConfigContext,
   ConfigContextType,
@@ -28,6 +29,7 @@ export default class MainView extends React.Component {
           >
             <CssBaseline />
             <ResponsiveAppBar />
+            <Dashboard />
           </ThemeProvider>
         )}
       </ConfigContext.Consumer>

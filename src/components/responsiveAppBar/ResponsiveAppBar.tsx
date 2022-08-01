@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {
   ConfigContext,
-  ConfigContextType
+  ConfigContextType,
 } from "../../context/ConfigContextProvider";
 
 const pages = ["Products", "Pricing", "Blog"];
