@@ -3,7 +3,7 @@ import AppBar from "./features/app-bar/AppBar";
 
 function App() {
   return (
-    <div>
+    <div className="bg-blue-200 dark:bg-grey-800 w-full h-full absolute">
       <AppBar />
     </div>
   );
