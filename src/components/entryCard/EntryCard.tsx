@@ -4,29 +4,24 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import React from "react";
+import { DiaryEntry } from "../../types/DiaryEntry";
 
-type GistCardProp = {
-  title: string
+type EntryCardProp = {
+  entry: DiaryEntry
 }
 
-class GistCard extends React.Component<GistCardProp, {}> {
+class EntryCard extends React.Component<EntryCardProp, {}> {
   render() {
     return (
       <Card sx={{ maxWidth: 345 }}>
         <CardActionArea>
-          <CardMedia
-            component="img"
-            height="140"
-            src="https://picsum.photos/280/140"
-            alt="green iguana"
-          />
+          
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {this.props.title}
+              {this.props.entry.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
+              {this.props.entry.description}
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -40,4 +35,4 @@ class GistCard extends React.Component<GistCardProp, {}> {
   }
 }
 
-export default GistCard;
+export default EntryCard;

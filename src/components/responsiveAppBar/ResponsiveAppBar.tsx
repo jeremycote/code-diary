@@ -20,8 +20,8 @@ import {
 } from "../../context/ConfigContextProvider";
 import { apiClient } from "../../services";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages: string[] = [];
+const settings: string[] = ["Profile", "Account", "Dashboard", "Logout"];
 
 type ResponsiveAppBarState = {
   anchorElNav: HTMLElement | null;
@@ -41,6 +41,14 @@ class ResponsiveAppBar extends React.Component<any, ResponsiveAppBarState> {
       anchorElUser: null,
       userProfilePic: null
     };
+
+    this.setAnchorElNav = this.setAnchorElNav.bind(this);
+    this.setAnchorElUser = this.setAnchorElUser.bind(this);
+    this.handleOpenNavMenu = this.handleOpenNavMenu.bind(this);
+    this.handleOpenUserMenu = this.handleOpenUserMenu.bind(this);
+    this.handleCloseNavMenu = this.handleCloseNavMenu.bind(this);
+    this.handleCloseUserMenu = this.handleCloseUserMenu.bind(this);
+
   }
 
   componentDidMount(){
@@ -62,11 +70,13 @@ class ResponsiveAppBar extends React.Component<any, ResponsiveAppBarState> {
   }
 
   handleOpenNavMenu(event: React.MouseEvent<HTMLElement>) {
-    this.setAnchorElNav(event.currentTarget);
+    this.setAnchorElNav(event.currentTarget); 
   }
 
   handleOpenUserMenu(event: React.MouseEvent<HTMLElement>) {
-    this.setAnchorElUser(event.currentTarget);
+    console.log(`Target: ${event}`)
+    this.setState({ anchorElUser: event.currentTarget });
+    // this.setAnchorElUser(event.currentTarget);
   }
 
   handleCloseNavMenu() {
@@ -78,9 +88,6 @@ class ResponsiveAppBar extends React.Component<any, ResponsiveAppBarState> {
   }
 
   render() {
-
-    console.log(this.state.userProfilePic)
-
     return (
       <AppBar position="static">
         <Container maxWidth="xl">
