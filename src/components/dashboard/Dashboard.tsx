@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, styled } from "@mui/material";
 import React from "react";
 import {
   ConfigContext,
@@ -7,6 +7,8 @@ import {
 import { apiClient } from "../../services";
 import { DiaryEntry } from "../../types/DiaryEntry";
 import EntryCard from "../entryCard/EntryCard";
+import Card, { CardProps } from "@mui/material/Card";
+import CardContent, { CardContentProps } from "@mui/material/CardContent";
 
 type DashboardState = {
   entries: DiaryEntry[];
@@ -18,16 +20,15 @@ class Dashboard extends React.Component<{}, DashboardState> {
   context!: React.ContextType<typeof ConfigContext>;
 
   constructor(props: {}) {
-    super(props)
+    super(props);
     this.state = {
-      entries: []
-    }
+      entries: [],
+    };
   }
 
   componentDidMount() {
-    
-    console.log(this.context!.gitApiUrl + "/users/jeremycote/gists")
-    
+    console.log(this.context!.gitApiUrl + "/users/jeremycote/gists");
+
     // fetch(this.context!.gitApiUrl + "/users/jeremycote/gists")
     //   .then((res) => res.json())
     //   .then((data) => {
@@ -36,21 +37,43 @@ class Dashboard extends React.Component<{}, DashboardState> {
     //   .catch(console.log);
 
     apiClient.getIndex().then((index) => {
-      console.log(index)
+      console.log(index);
       if (index) {
-        console.log(`Index version: ${index.version}`)
-        this.setState({ entries: index.entries })
+        console.log(`Index version: ${index.version}`);
+        this.setState({ entries: index.entries });
       }
-    })
+    });
   }
 
   render() {
     return (
       <div>
-        <Grid container spacing={2} justifyContent="center" direction="row">
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 2, sm: 8, md: 16 }}
+          justifyContent="center"
+          direction="row"
+        >
           {this.state.entries.map((entry) => (
-            <Grid item key={entry.name}>
-              <EntryCard entry={entry}/>
+            <Grid item xs={2} sm={4} md={4} key={entry.name}>
+              <EntryCard
+                entry={entry}
+              />
+            </Grid>
+          ))}
+          {this.state.entries.map((entry) => (
+            <Grid item xs={2} sm={4} md={4} key={entry.name}>
+              <EntryCard
+                entry={entry}
+              />
+            </Grid>
+          ))}
+          {this.state.entries.map((entry) => (
+            <Grid item xs={2} sm={4} md={4} key={entry.name}>
+              <EntryCard
+                entry={entry}
+              />
             </Grid>
           ))}
         </Grid>

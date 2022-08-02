@@ -27,7 +27,7 @@ export default class MainView extends React.Component {
           <ThemeProvider
             theme={config?.theme === "dark" ? this.darkTheme : this.lightTheme}
           >
-            <CssBaseline />
+            <CssBaseline enableColorScheme />
             <ResponsiveAppBar />
             <Dashboard />
           </ThemeProvider>

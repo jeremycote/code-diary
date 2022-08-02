@@ -89,7 +89,7 @@ class ResponsiveAppBar extends React.Component<any, ResponsiveAppBarState> {
 
   render() {
     return (
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <BookIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
