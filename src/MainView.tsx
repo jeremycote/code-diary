@@ -33,14 +33,13 @@ export default class MainView extends React.Component {
             >
               <CssBaseline enableColorScheme />
               <ResponsiveAppBar />
-              {/* <BrowserRouter>
+              <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/entry/:entryId" element={<EntryViewer />} />
                   <Route path="*" element={<h1>404 not found</h1>} />
                 </Routes>
-              </BrowserRouter> */}
-              <EntryViewer/>
+              </BrowserRouter>
             </ThemeProvider>
           )}
         </ConfigContext.Consumer>
