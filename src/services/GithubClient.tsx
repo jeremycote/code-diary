@@ -1,32 +1,39 @@
-import { FullGithubAccount, GithubAccount } from "../types/GithubAccount";
 import Axios, { AxiosInstance } from "axios";
-import { ApiClient } from "./ApiClient";
-import { GithubApiConfiguration } from "../types/GithubApiConfiguration";
-import { DiaryEntry } from "../types/DiaryEntry";
-import { GithubFile } from "../types/GithubFile";
-import { DiaryIndex } from "../types/DiaryIndex";
 import { Buffer } from 'buffer';
+import { DiaryEntry } from "../types/DiaryEntry";
+import { DiaryIndex } from "../types/DiaryIndex";
+import { FullGithubAccount } from "../types/GithubAccount";
+import { GithubApiConfiguration } from "../types/GithubApiConfiguration";
+import { GithubFile } from "../types/GithubFile";
+import { ApiClient } from "./ApiClient";
 export default class GithubClient implements ApiClient {
   private client: AxiosInstance;
 
   private user: FullGithubAccount | null = null;
 
+  private apiConfiguration!: GithubApiConfiguration;
+
   protected createClient(
     apiConfiguration: GithubApiConfiguration
   ): AxiosInstance {
-    console.log(`Token ${apiConfiguration.token}`);
+
+    this.apiConfiguration = apiConfiguration
 
     return Axios.create({
       baseURL: apiConfiguration.baseUrl,
       responseType: "json" as const,
-      headers: {
-        "Content-Type": "application/json",
-        ...(apiConfiguration.token && {
-          Authorization: `Token ${apiConfiguration.token}`,
-        }),
-      },
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   ...(apiConfiguration.token && {
+      //     Authorization: `Token ${apiConfiguration.token}`,
+      //   }),
+      // },
       timeout: 10 * 1000, // 10 * 1000ms = 10s
     });
+  }
+
+  public login() {
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.apiConfiguration.clientId}&redirect_uri=http://localhost:3000/login/callback&state=state&user=jeremycote`
   }
 
   constructor(apiConfiguration: GithubApiConfiguration) {

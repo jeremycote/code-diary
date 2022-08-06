@@ -1,14 +1,11 @@
-import { Grid, styled } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import React from "react";
 import {
-  ConfigContext,
-  ConfigContextType,
+  ConfigContext
 } from "../../context/ConfigContextProvider";
 import { apiClient } from "../../services";
 import { DiaryEntry } from "../../types/DiaryEntry";
 import EntryCard from "../entryCard/EntryCard";
-import Card, { CardProps } from "@mui/material/Card";
-import CardContent, { CardContentProps } from "@mui/material/CardContent";
 
 type DashboardState = {
   entries: DiaryEntry[];
@@ -48,6 +45,7 @@ class Dashboard extends React.Component<{}, DashboardState> {
   render() {
     return (
       <div>
+        <Button onClick={() => apiClient.login()}>Log in</Button>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
