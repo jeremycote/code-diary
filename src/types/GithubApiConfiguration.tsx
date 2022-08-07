@@ -1,4 +1,8 @@
 export type GithubApiConfiguration = {
-    baseUrl: string,
-    clientId: string
+    apiBaseUrl: string,
+    clientId: string,
+    appBaseUrl: string,
+    oauthUrl: string,
+    state: string,
+    clientSecret: string
 }

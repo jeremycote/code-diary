@@ -7,5 +7,6 @@ export interface ApiClient {
   getIndex(): Promise<DiaryIndex | null>;
   getEntries(path: string): Promise<DiaryEntry[]>;
   getFile(path: string): Promise<GithubFile | null>;
-  login(): void
+  login(): void;
+  setupClient(code: string, state: string): void;
 }

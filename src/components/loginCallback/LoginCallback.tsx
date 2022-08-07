@@ -1,16 +1,17 @@
 import { useSearchParams } from 'react-router-dom';
+import { apiClient } from '../../services';
 
 function LoginCallback() {
-  const params = useSearchParams();
+  const params: URLSearchParams = useSearchParams()[0];
+
+  const code = params.get('code') ?? ""
+  const state = params.get('state') ?? ""
+
+  apiClient.setupClient(code, state)
 
   return (
     <div>
-      {params.map((k, v) => (
-        <div>
-        <p>{k.toString()}</p>
-        <p>{v.toString()}</p>
-        </div>
-      ))}
+      <p>{code}</p>
     </div>
   );
 }
