@@ -4,5 +4,5 @@ export type GithubApiConfiguration = {
     appBaseUrl: string,
     oauthUrl: string,
     state: string,
-    clientSecret: string
+    azureUrl: string
 }

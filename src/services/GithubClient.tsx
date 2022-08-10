@@ -58,9 +58,9 @@ export default class GithubClient implements ApiClient {
     console.log("getTokens: validating state")
     if (this.validateState(state)) {
       try {
-        console.log("Valid state, getting tokens")
+        console.log(`Valid state, getting tokens using url: ${`${this.apiConfiguration.azureUrl}/AuthorizeCodeDiaryGithub?github_code=${code}`} `)
         const response = await axios.post<GithubTokenResponse>(
-          `${this.apiConfiguration.oauthUrl}/access_token?client_id=${this.apiConfiguration.clientId}&client_secret=${this.apiConfiguration.clientSecret}&code=${code}&state=${this.apiConfiguration.state}`
+          `${this.apiConfiguration.azureUrl}/AuthorizeCodeDiaryGithub?github_code=${code}`
         );
         console.log(response.data)
         return response.data;

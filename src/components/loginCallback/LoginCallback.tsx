@@ -12,6 +12,7 @@ function LoginCallback() {
   return (
     <div>
       <p>{code}</p>
+      <p>{state}</p>
     </div>
   );
 }
