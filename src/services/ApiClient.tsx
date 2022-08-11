@@ -8,5 +8,5 @@ export interface ApiClient {
   getEntries(path: string): Promise<DiaryEntry[]>;
   getFile(path: string): Promise<GithubFile | null>;
   login(): void;
-  setupClient(code: string, state: string): void;
+  setupClient(code: string, state: string): Promise<boolean>;
 }

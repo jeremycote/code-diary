@@ -9,6 +9,13 @@ import { GithubFile } from '../types/GithubFile';
 import { GithubTokenResponse } from '../types/GithubTokenResponse';
 import { ApiClient } from './ApiClient';
 export default class GithubClient implements ApiClient {
+  
+  private isReady: boolean = false;
+
+  public getIsReady(): boolean {
+    return this.isReady;
+  }
+  
   private client: AxiosInstance | null = null;
 
   private user: FullGithubAccount | null = null;
@@ -17,23 +24,60 @@ export default class GithubClient implements ApiClient {
 
   constructor(apiConfiguration: GithubApiConfiguration) {
     this.apiConfiguration = apiConfiguration;
+    this._setupClient()
   }
 
-  public async setupClient(code: string, state: string) {
-    console.log("Setting up client")
-    this.getTokens(code, state).then(tokens => {
-      if (tokens) {
-        this.client = this.createClient(tokens!.access_token);
-        this.getSignedInUser().then(user => {
-          if (user) {
-            this.user = user;
-            console.log(`Successfully logged in as ${this.user.login}`);
-          } else {
-            console.error('Failed to get user from github.');
-          }
-        });
+  private async _setupClient(): Promise<void> {
+    // Check if user is already authenticated
+
+    // If not, get new creds and dump them into local storage
+
+    // Creds exist, create the client
+  }
+
+  public async setupClient(code: string, state: string): Promise<boolean> {
+    console.log('Setting up client');
+    const newTokens = await this.getTokens(code, state);
+
+    if (newTokens) {
+      this.setTokens(newTokens);
+
+      this.client = this.createClient(this.getAccessToken());
+
+      this.getSignedInUser().then(user => {
+        if (user) {
+          this.user = user;
+          console.log(`Successfully logged in as ${this.user.login}`);
+        } else {
+          console.error('Failed to get user from github.');
+        }
+      });
+
+      return true;
+    }
+
+    return false;
+  }
+
+  protected setTokens(tokens: GithubTokenResponse): void {
+    
+    Object.entries(tokens)
+    .forEach(([key, value]) => {
+      
+      // Save expiration date in seconds
+      if (key.indexOf('expires_in') !== -1) {
+        const d = new Date();
+        console.log(value)
+        d.setSeconds(d.getSeconds() + (value as number))
+        window.localStorage.setItem(key.replace('expires_in', 'expires_on'), d.toISOString())
       }
-    });
+      
+      window.localStorage.setItem(key, `${value}`)
+    })
+  }
+
+  protected getAccessToken(): string {
+    return window.localStorage.getItem('access_token') ?? ""
   }
 
   protected createClient(access_token: string): AxiosInstance {
@@ -55,17 +99,22 @@ export default class GithubClient implements ApiClient {
   }
 
   private async getTokens(code: string, state: string): Promise<GithubTokenResponse | null> {
-    console.log("getTokens: validating state")
+    console.log('getTokens: validating state');
     if (this.validateState(state)) {
       try {
-        console.log(`Valid state, getting tokens using url: ${`${this.apiConfiguration.azureUrl}/AuthorizeCodeDiaryGithub?github_code=${code}`} `)
         const response = await axios.post<GithubTokenResponse>(
           `${this.apiConfiguration.azureUrl}/AuthorizeCodeDiaryGithub?github_code=${code}`
         );
-        console.log(response.data)
+
+        console.log(`Here is your access_token: ${response.data.access_token}`);
+
+        if (response.data.access_token === null || response.data.access_token === undefined) {
+          return null;
+        }
+
         return response.data;
       } catch (error) {
-        console.log("Failed to get tokens")
+        console.log('Failed to get tokens');
         console.error(error);
       }
     }
