@@ -20,7 +20,7 @@ function Dashboard() {
         console.error("Index failed to load");
       }
     });
-  })
+  }, [apiClient])
   
   return (
     <div>

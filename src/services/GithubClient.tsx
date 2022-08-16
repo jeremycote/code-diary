@@ -3,19 +3,20 @@ import Axios, { AxiosInstance } from 'axios';
 import { Buffer } from 'buffer';
 import { DiaryEntry } from '../types/DiaryEntry';
 import { DiaryIndex } from '../types/DiaryIndex';
+import { Repository } from '../types/Github/Repository';
 import { FullGithubAccount } from '../types/GithubAccount';
 import { GithubApiConfiguration } from '../types/GithubApiConfiguration';
 import { GithubFile } from '../types/GithubFile';
 import { GithubTokenResponse } from '../types/GithubTokenResponse';
 import { ApiClient } from './ApiClient';
+
 export default class GithubClient implements ApiClient {
-  
   private isReady: boolean = false;
 
   public getIsReady(): boolean {
     return this.isReady;
   }
-  
+
   private client: AxiosInstance | null = null;
 
   private user: FullGithubAccount | null = null;
@@ -24,14 +25,12 @@ export default class GithubClient implements ApiClient {
 
   constructor(apiConfiguration: GithubApiConfiguration) {
     this.apiConfiguration = apiConfiguration;
-    this._setupClient()
+    this._setupClient();
   }
 
   private async _setupClient(): Promise<void> {
     // Check if user is already authenticated
-
     // If not, get new creds and dump them into local storage
-
     // Creds exist, create the client
   }
 
@@ -60,24 +59,21 @@ export default class GithubClient implements ApiClient {
   }
 
   protected setTokens(tokens: GithubTokenResponse): void {
-    
-    Object.entries(tokens)
-    .forEach(([key, value]) => {
-      
+    Object.entries(tokens).forEach(([key, value]) => {
       // Save expiration date in seconds
       if (key.indexOf('expires_in') !== -1) {
         const d = new Date();
-        console.log(value)
-        d.setSeconds(d.getSeconds() + (value as number))
-        window.localStorage.setItem(key.replace('expires_in', 'expires_on'), d.toISOString())
+        console.log(value);
+        d.setSeconds(d.getSeconds() + (value as number));
+        window.localStorage.setItem(key.replace('expires_in', 'expires_on'), d.toISOString());
       }
-      
-      window.localStorage.setItem(key, `${value}`)
-    })
+
+      window.localStorage.setItem(key, `${value}`);
+    });
   }
 
   protected getAccessToken(): string {
-    return window.localStorage.getItem('access_token') ?? ""
+    return window.localStorage.getItem('access_token') ?? '';
   }
 
   protected createClient(access_token: string): AxiosInstance {
@@ -185,5 +181,19 @@ export default class GithubClient implements ApiClient {
     }
 
     return null;
+  }
+
+  public async getUserRepositories(): Promise<Repository[] | null> {
+    if (this.client === null) {
+      return null;
+    }
+
+    try {
+      const response = await this.client.get<Repository[]>('/user/repos');
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 }
