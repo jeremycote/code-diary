@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { apiClient } from '../../services';
+import { ApiContext } from '../../context/ApiContextProvider';
 
 function LoginCallback() {
+  
+  const api = useContext(ApiContext);
+
   const params: URLSearchParams = useSearchParams()[0];
 
   const navigate = useNavigate();
@@ -11,7 +14,7 @@ function LoginCallback() {
   const state = params.get('state') ?? ""
 
   useEffect(() => {
-    apiClient.setupClient(code, state).then(success => {
+    api.setupClient(code, state).then(success => {
       if (success) {
         console.log("Setup passed. Going home.")
         navigate('/')
@@ -19,7 +22,7 @@ function LoginCallback() {
         console.log("Setup failed")
       }
     })
-  }, [apiClient, code, state])
+  }, [code, state])
 
 
   return (

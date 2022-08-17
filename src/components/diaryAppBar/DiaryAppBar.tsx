@@ -15,12 +15,13 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import React, { MouseEvent } from 'react';
 import { useEffect, useState, useContext } from 'react';
+import { ApiContext } from '../../context/ApiContextProvider';
 import { ConfigContext, ConfigContextType } from '../../context/ConfigContextProvider';
-import { apiClient } from '../../services';
 import { Repository } from '../../types/Github/Repository';
 
 function DiaryAppBar() {
   const context = useContext(ConfigContext);
+  const api = useContext(ApiContext);
 
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement | null>(null);
   const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
@@ -48,15 +49,16 @@ function DiaryAppBar() {
   const pages: string[] = [];
 
   useEffect(() => {
-    apiClient.getSignedInUser().then(user => {
+    console.log(api.client);
+    api.client?.getUser().then(user => {
       if (user && user.avatar_url) {
         setUserProfilePic(user.avatar_url);
       }
     });
-  }, [apiClient]);
+  }, [api.client]);
 
   useEffect(() => {
-    apiClient.getUserRepositories().then(repos => {
+    api.client?.getUserRepositories().then(repos => {
       if (repos) {
         console.log(repos);
         setRepositories(repos);
@@ -64,7 +66,7 @@ function DiaryAppBar() {
         console.log('Returned repos is null');
       }
     });
-  }, [apiClient]);
+  }, [api.client]);
 
   return (
     <AppBar position="sticky">

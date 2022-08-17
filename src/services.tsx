@@ -1,5 +1,4 @@
-import { ApiClient } from "./services/ApiClient";
-import GithubClient from "./services/GithubClient";
+import { GithubApiConfiguration } from "./types/GithubApiConfiguration"
 
 const baseURL: string = process.env['REACT_APP_BASE_URL'] ?? ""
 const clientId: string = process.env['REACT_APP_API_CLIENT_ID'] ?? ""
@@ -27,11 +26,11 @@ if (azureUrl === "") {
     console.error("azureApiURL is undefined")
 }
 
-export const apiClient: ApiClient = new GithubClient({
+export const apiConfiguration: GithubApiConfiguration = {
     apiBaseUrl: apiBaseURL,
     clientId: clientId,
     appBaseUrl: baseURL,
     oauthUrl: "https://github.com/login/oauth",
     azureUrl: azureUrl,
     state: apiState,
-})
+}
