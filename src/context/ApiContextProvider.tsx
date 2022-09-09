@@ -49,24 +49,38 @@ const ApiContextProvider = ({ children, apiConfiguration }: ApiContextProviderPr
     window.location.href = `${apiConfiguration.oauthUrl}/authorize?client_id=${apiConfiguration.clientId}&redirect_uri=${apiConfiguration.appBaseUrl}/login/callback&state=${apiConfiguration.state}`;
   };
 
+  const setupClientUsingCache = async (): Promise<boolean> => {
+    if (apiConfiguration == null) {
+      return false;
+    }
+
+    let access_token = getAccessToken();
+
+    //TODO: Check if token is expired
+
+    if (access_token === '') {
+      return false;
+    }
+
+    console.log('Attempting to create GithubClient using cached token ' + access_token);
+    setClient(new GithubClient(apiConfiguration, access_token));
+    return true;
+  };
+
   const setupClient = async (code: string, state: string): Promise<boolean> => {
     if (apiConfiguration == null) {
       return false;
     }
 
     const t = await _getTokens(code, state);
-
-    console.log(t);
-
-    if (t && t.access_token) {
-      console.log('Attempting to create GithubClient using token ' + t.access_token);
-      setClient(new GithubClient(apiConfiguration, t.access_token));
+    if (t?.access_token != '') {
+      setTokens(t!);
+      console.log('Attempting to create GithubClient using token ' + t?.access_token);
+      setClient(new GithubClient(apiConfiguration, t!.access_token));
       return true;
     } else {
-      console.error('Failed to createClient');
+      return false;
     }
-
-    return false;
   };
 
   const _getTokens = async (code: string, state: string): Promise<GithubTokenResponse | null> => {
@@ -114,6 +128,14 @@ const ApiContextProvider = ({ children, apiConfiguration }: ApiContextProviderPr
   const getAccessToken = () => {
     return window.localStorage.getItem('access_token') ?? '';
   };
+
+  useEffect(() => {
+    setupClientUsingCache();
+  }, []);
+
+  console.log('Status check:');
+  console.log(user);
+  console.log(client);
 
   return (
     <ApiContext.Provider
