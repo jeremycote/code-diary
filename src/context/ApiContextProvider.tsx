@@ -38,12 +38,12 @@ const ApiContextProvider = ({ children, apiConfiguration }: ApiContextProviderPr
   useEffect(() => {
     if (client) {
       client.getUser().then(user => {
-        setUser(user)
-      })
+        setUser(user);
+      });
     } else {
       setUser(null);
     }
-  }, [client])
+  }, [client]);
 
   const login = () => {
     window.location.href = `${apiConfiguration.oauthUrl}/authorize?client_id=${apiConfiguration.clientId}&redirect_uri=${apiConfiguration.appBaseUrl}/login/callback&state=${apiConfiguration.state}`;

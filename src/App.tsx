@@ -3,12 +3,11 @@ import { Router, Routes, Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import EntryViewer from './components/EntryViewer/EntryViewer';
-import LoginCallback from './components/loginCallback/LoginCallback';
 import ResponsiveAppBar from './components/diaryAppBar/DiaryAppBar';
-import ConfigContextProvider, { ConfigContext, ConfigContextType } from './context/ConfigContextProvider';
-import { ApiContext } from './context/ApiContextProvider';
+import { ConfigContext, ConfigContextType } from './context/ConfigContextProvider';
+import ApiContextProvider, { ApiContext } from './context/ApiContextProvider';
 import { useContext } from 'react';
-import Login from './components/login/Login';
+import { apiConfiguration } from './services';
 
 function App() {
   const darkTheme = createTheme({
@@ -30,14 +29,18 @@ function App() {
       {(config: ConfigContextType | null) => (
         <ThemeProvider theme={config?.theme === 'dark' ? darkTheme : lightTheme}>
           <CssBaseline enableColorScheme />
-          <ResponsiveAppBar />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/:entryId/*" element={<EntryViewer />} />
-              <Route path="*" element={<h1>404 not found</h1>} />
-            </Routes>
-          </BrowserRouter>
+          <ApiContextProvider apiConfiguration={apiConfiguration}>
+            <>
+              <ResponsiveAppBar />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/:entryId/*" element={<EntryViewer />} />
+                  <Route path="*" element={<h1>404 not found</h1>} />
+                </Routes>
+              </BrowserRouter>
+            </>
+          </ApiContextProvider>
         </ThemeProvider>
       )}
     </ConfigContext.Consumer>

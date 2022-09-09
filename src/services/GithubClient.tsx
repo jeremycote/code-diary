@@ -75,12 +75,12 @@ export default class GithubClient implements ApiClient {
 
   async getUser(): Promise<FullGithubAccount | null> {
     if (this.client === null) {
-      console.error("this.client is null. Unable to fetch user.")
+      console.error('this.client is null. Unable to fetch user.');
       return null;
     }
 
     try {
-      console.log("GET /user")
+      console.log('GET /user');
       const response = await this.client.get<FullGithubAccount>('/user');
       return response.data;
     } catch (error) {
